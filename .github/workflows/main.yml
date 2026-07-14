@@ -15,9 +15,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y git bc bison build-essential curl flex gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libssl-dev libncurses5-dev
-    - name: Build Kernel
+    - name: Find Config
       run: |
-        export ARCH=arm64
-        export CROSS_COMPILE=aarch64-linux-gnu-
-        make defconfig
-        make -j$(nproc)
+        find arch/arm64/configs -name "*a32*"

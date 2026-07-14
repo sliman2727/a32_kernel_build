@@ -20,4 +20,5 @@ jobs:
         export ARCH=arm64
         export CROSS_COMPILE=aarch64-linux-gnu-
         make a32x_defconfig
+        scripts/config --disable CONFIG_CC_STACKPROTECTOR_STRONG
         make -j$(nproc)

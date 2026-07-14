@@ -11,16 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
     - name: Set up Environment
       run: |
         sudo apt-get update
         sudo apt-get install -y git bc bison build-essential curl flex gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libssl-dev libncurses5-dev
+
     - name: Build Kernel
-      shell: /bin/bash
       run: |
+        /bin/bash -c "
         export ARCH=arm64
         export CROSS_COMPILE=aarch64-linux-gnu-
         make a32x_defconfig
         scripts/config --disable CONFIG_CC_STACKPROTECTOR_STRONG
         sed -i 's/CONFIG_KPERFMON=y/CONFIG_KPERFMON=n/' .config
         make -j$(nproc)
+        "

@@ -16,7 +16,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y git bc bison build-essential curl flex gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libssl-dev libncurses5-dev
-        # إنشاء المجلدات والملفات الفارغة التي يشتكي منها النظام
+        # استبدال dash بـ bash كافتراضي لتجنب مشاكل الصيغة
+        sudo ln -sf /bin/bash /bin/sh
+        # إنشاء المسارات والملفات المفقودة
         mkdir -p ../../system/core/liblog/include/log/
         touch ../../system/core/liblog/include/log/perflog.h
         mkdir -p drivers/kperfmon/
@@ -24,11 +26,9 @@ jobs:
 
     - name: Build Kernel
       run: |
-        /bin/bash -c "
         export ARCH=arm64
         export CROSS_COMPILE=aarch64-linux-gnu-
         make a32x_defconfig
         scripts/config --disable CONFIG_CC_STACKPROTECTOR_STRONG
         sed -i 's/CONFIG_KPERFMON=y/CONFIG_KPERFMON=n/' .config
         make -j$(nproc)
-        "

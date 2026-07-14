@@ -1,0 +1,23 @@
+name: Build Kernel
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git bc bison build-essential curl flex gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libssl-dev libncurses5-dev
+    - name: Build Kernel
+      run: |
+        export ARCH=arm64
+        export CROSS_COMPILE=aarch64-linux-gnu-
+        make defconfig
+        make -j$(nproc)

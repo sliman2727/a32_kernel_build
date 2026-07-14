@@ -1,4 +1,4 @@
-name: Build Kernel
+# trigger buildname: Build Kernel
 
 on:
   push:

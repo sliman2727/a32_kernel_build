@@ -16,6 +16,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y git bc bison build-essential curl flex gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libssl-dev libncurses5-dev
+        # حذف جميع أوامر cp التي تبحث عن ملفات perflog في Makefile
+        find . -name "Makefile" -exec sed -i '/perflog/d' {} \;
+        find . -name "*.mk" -exec sed -i '/perflog/d' {} \;
 
     - name: Build Kernel
       run: |
@@ -23,8 +26,4 @@ jobs:
         export CROSS_COMPILE=aarch64-linux-gnu-
         make a32x_defconfig
         scripts/config --disable CONFIG_CC_STACKPROTECTOR_STRONG
-        scripts/config --disable CONFIG_KPERFMON
-        sed -i 's/CONFIG_KPERFMON=y/CONFIG_KPERFMON=n/' .config
-        # تعطيل ميزة الـ GPU DDK مؤقتاً لتجاوز خطأ التجميع
-        sed -i 's/CONFIG_MALI_PLATFORM_THIRDPARTY=y/CONFIG_MALI_PLATFORM_THIRDPARTY=n/' .config
         make -j$(nproc)

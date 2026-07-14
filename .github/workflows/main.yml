@@ -16,6 +16,11 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y git bc bison build-essential curl flex gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libssl-dev libncurses5-dev
+        # إنشاء المجلدات والملفات الفارغة التي يشتكي منها النظام
+        mkdir -p ../../system/core/liblog/include/log/
+        touch ../../system/core/liblog/include/log/perflog.h
+        mkdir -p drivers/kperfmon/
+        touch drivers/kperfmon/aprotoc
 
     - name: Build Kernel
       run: |

@@ -16,6 +16,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y git bc bison build-essential curl flex gcc-aarch64-linux-gnu g++-aarch64-linux-gnu libssl-dev libncurses5-dev
+        # هذا الأمر هو الحل الجذري لتغيير المفسر الافتراضي لكل شيء
+        sudo ln -sf /bin/bash /bin/sh
         mkdir -p ../../system/core/liblog/include/log/
         touch ../../system/core/liblog/include/log/perflog.h
         mkdir -p drivers/kperfmon/
@@ -28,5 +30,5 @@ jobs:
         make a32x_defconfig
         scripts/config --disable CONFIG_CC_STACKPROTECTOR_STRONG
         sed -i 's/CONFIG_KPERFMON=y/CONFIG_KPERFMON=n/' .config
-        # إضافة SHELL=/bin/bash هنا لإجبار make على استخدامه
-        make -j$(nproc) SHELL=/bin/bash
+        # حذف SHELL=/bin/bash هنا لأننا غيرنا المفسر على مستوى النظام
+        make -j$(nproc)
